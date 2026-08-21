@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  --midnight: #1c2b35;
+  --slate: #2e4a5a;
+  --mist: #8fa8b4;
+  --gold: #b8922a;
+  --gold-light: #d4a94e;
+  --sand: #f2ebe0;
+  --paper: #fafaf7;
+  --white: #ffffff;
+}
+
+@theme inline {
+  --color-midnight: var(--midnight);
+  --color-slate: var(--slate);
+  --color-mist: var(--mist);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-sand: var(--sand);
+  --color-paper: var(--paper);
+  --color-white: var(--white);
+
+  --font-display: var(--font-playfair);
+  --font-label: var(--font-inter);
+  --font-body: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--midnight);
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--midnight);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle background depth for section blocks — replaces flat color fills
+   with a soft directional glow, kept restrained so copy stays readable. */
+.bg-midnight-texture {
+  background-color: var(--midnight);
+  background-image:
+    radial-gradient(60% 55% at 16% 0%, rgba(184, 146, 42, 0.16) 0%, transparent 62%),
+    radial-gradient(55% 50% at 100% 100%, rgba(143, 168, 180, 0.12) 0%, transparent 65%);
+}
+
+.bg-sand-texture {
+  background-color: var(--sand);
+  background-image:
+    radial-gradient(65% 50% at 92% 0%, rgba(184, 146, 42, 0.12) 0%, transparent 60%),
+    radial-gradient(50% 45% at 0% 100%, rgba(46, 74, 90, 0.06) 0%, transparent 60%);
+}
+
+.bg-paper-texture {
+  background-color: var(--paper);
+  background-image: radial-gradient(55% 45% at 94% 0%, rgba(184, 146, 42, 0.055) 0%, transparent 60%);
+}
+
+/* Consistent soft-lift treatment for card/box elements site-wide. */
+.card-lift {
+  transition:
+    transform 300ms ease-out,
+    box-shadow 300ms ease-out,
+    border-color 300ms ease-out;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+}
