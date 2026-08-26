@@ -32,17 +32,70 @@ const amenityIcons = [IconPool, IconGrid, IconSprout, IconSofa, IconCar];
 const wideIndexes = new Set([0, 3, 12]);
 const aspectRatios = images.map((_, i) => (wideIndexes.has(i) ? 16 / 10 : 4 / 3));
 
-const GRID_GAP = 16; // px — matches Tailwind gap-4
-const ROW_UNIT = 4; // px — granularity of the masonry row track
+const DESKTOP_COLUMN_COUNT = 3;
 
-function spanFor(ratio: number, colWidth: number) {
-  const height = colWidth / ratio;
-  return Math.max(1, Math.ceil((height + GRID_GAP) / (ROW_UNIT + GRID_GAP)));
+// True masonry: walk the images in order and always drop the next one into
+// whichever column is currently shortest (Pinterest-style greedy packing).
+// Unlike CSS `columns` (which lets the browser balance columns and can strand
+// a column short) or CSS Grid row-spans (which reserves fixed-size cells),
+// this stacks each column with normal block flow, so a column can never have
+// a gap partway down it — only a harmless height difference at the very
+// bottom, which is inherent to masonry and not a "gap".
+//
+// The initial greedy pass can still leave columns lopsided: e.g. every
+// wide (shorter) image happens to land in the same column, so that column
+// needs an extra image just to catch up to the others' height. A second
+// pass then repeatedly swaps single images between columns whenever a swap
+// shrinks the gap between the tallest and shortest column, until no such
+// swap remains — a small local-search cleanup on top of the greedy pack.
+function distributeMasonry(columnCount: number, imageCount: number) {
+  const REFERENCE_WIDTH = 400; // only relative height comparisons matter here
+  const GAP = 16; // px — matches Tailwind gap-4
+  const itemHeight = (i: number) => REFERENCE_WIDTH / aspectRatios[i] + GAP;
+
+  const heights = new Array(columnCount).fill(0);
+  const columns: number[][] = Array.from({ length: columnCount }, () => []);
+  for (let i = 0; i < imageCount; i++) {
+    let shortest = 0;
+    for (let c = 1; c < columnCount; c++) {
+      if (heights[c] < heights[shortest]) shortest = c;
+    }
+    columns[shortest].push(i);
+    heights[shortest] += itemHeight(i);
+  }
+
+  let improved = true;
+  while (improved) {
+    improved = false;
+    for (let a = 0; a < columnCount; a++) {
+      for (let b = a + 1; b < columnCount; b++) {
+        const before = Math.abs(heights[a] - heights[b]);
+        for (let ia = 0; ia < columns[a].length; ia++) {
+          for (let ib = 0; ib < columns[b].length; ib++) {
+            const ha = itemHeight(columns[a][ia]);
+            const hb = itemHeight(columns[b][ib]);
+            const after = Math.abs(heights[a] - ha + hb - (heights[b] - hb + ha));
+            if (after < before) {
+              const swap = columns[a][ia];
+              columns[a][ia] = columns[b][ib];
+              columns[b][ib] = swap;
+              heights[a] += hb - ha;
+              heights[b] += ha - hb;
+              improved = true;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Swaps can put images out of their original order within a column;
+  // restore top-to-bottom reading order now that membership is settled.
+  columns.forEach((col) => col.sort((x, y) => x - y));
+  return columns;
 }
 
-// Reasonable spans for a ~420px column (desktop default) so there's no flash
-// of collapsed tiles before the ResizeObserver measures the real width.
-const defaultSpans = aspectRatios.map((ratio) => spanFor(ratio, 420));
+const desktopColumns = distributeMasonry(DESKTOP_COLUMN_COUNT, images.length);
 
 export function VillaGallery({
   kicker,
@@ -54,26 +107,7 @@ export function VillaGallery({
   id?: string;
 }) {
   const scroller = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [spans, setSpans] = useState<number[]>(defaultSpans);
-
-  useEffect(() => {
-    const grid = gridRef.current;
-    if (!grid) return;
-
-    const recompute = () => {
-      const width = grid.clientWidth;
-      if (!width) return;
-      const colWidth = (width - GRID_GAP * 2) / 3;
-      setSpans(aspectRatios.map((ratio) => spanFor(ratio, colWidth)));
-    };
-
-    recompute();
-    const observer = new ResizeObserver(recompute);
-    observer.observe(grid);
-    return () => observer.disconnect();
-  }, []);
 
   const scrollBy = (dir: 1 | -1) => {
     scroller.current?.scrollBy({ left: dir * scroller.current.clientWidth * 0.85, behavior: "smooth" });
@@ -141,25 +175,30 @@ export function VillaGallery({
         </div>
       </div>
 
-      {/* Desktop: dense CSS grid — each tile's row-span is derived from its aspect
-          ratio and the live column width, so grid-auto-flow: dense packs tiles
-          into any short column with no leftover empty cells. */}
-      <div
-        ref={gridRef}
-        className="mx-auto mt-12 hidden max-w-[1300px] grid-cols-3 gap-4 px-6 sm:px-8 lg:mt-16 lg:grid"
-        style={{ gridAutoFlow: "dense", gridAutoRows: `${ROW_UNIT}px` }}
-      >
-        {images.map((img, i) => (
-          <button
-            key={img.src}
-            type="button"
-            onClick={() => openLightbox(i)}
-            aria-label={`Open image ${i + 1} of ${images.length}`}
-            style={{ gridRowEnd: `span ${spans[i] ?? defaultSpans[i]}` }}
-            className="relative block overflow-hidden rounded-xl shadow-xl shadow-midnight/10"
-          >
-            <GalleryImage img={img} priority={i === 0} />
-          </button>
+      {/* Desktop: true masonry — images are pre-sorted into column buckets by a
+          shortest-column-first algorithm, then each column stacks its images in
+          normal block flow. No fixed cells, no browser column-balancing, so no
+          gaps can ever open up inside a column. */}
+      <div className="mx-auto mt-12 hidden max-w-[1300px] gap-4 px-6 sm:px-8 lg:mt-16 lg:flex">
+        {desktopColumns.map((column, ci) => (
+          <div key={ci} className="flex flex-1 flex-col gap-4">
+            {column.map((i) => {
+              const img = images[i];
+              return (
+                <button
+                  key={img.src}
+                  type="button"
+                  onClick={() => openLightbox(i)}
+                  aria-label={`Open image ${i + 1} of ${images.length}`}
+                  className={`relative block w-full overflow-hidden rounded-xl shadow-xl shadow-midnight/10 ${
+                    wideIndexes.has(i) ? "aspect-[16/10]" : "aspect-[4/3]"
+                  }`}
+                >
+                  <GalleryImage img={img} priority={i === 0} />
+                </button>
+              );
+            })}
+          </div>
         ))}
       </div>
 
@@ -179,7 +218,7 @@ export function VillaGallery({
               aria-label={`Open image ${i + 1} of ${images.length}`}
               className="relative aspect-[4/3] w-[82vw] shrink-0 snap-center overflow-hidden rounded-xl shadow-xl shadow-midnight/10 sm:w-[60vw]"
             >
-              <GalleryImage img={img} priority={i === 0} />
+              <GalleryImage img={img} priority={i === 0} eager={i !== 0} />
             </button>
           ))}
         </div>
@@ -263,14 +302,29 @@ export function VillaGallery({
   );
 }
 
-function GalleryImage({ img, priority }: { img: (typeof images)[number]; priority?: boolean }) {
+// `eager` is for slides inside the horizontally-scrolling mobile carousel:
+// native `loading="lazy"` measures distance from the *clipped* scroll
+// container, not the page, so a slide a few swipes to the right never
+// enters the load-distance threshold from vertical page scroll alone and
+// is stuck unloaded until the user swipes there manually. The carousel's
+// images are small (next/image serves the ~85vw crop), so loading them
+// upfront is cheap and guarantees every photo is reachable.
+function GalleryImage({
+  img,
+  priority,
+  eager,
+}: {
+  img: (typeof images)[number];
+  priority?: boolean;
+  eager?: boolean;
+}) {
   return (
     <Image
       src={img.src}
       alt={img.alt}
       fill
       priority={priority}
-      loading={priority ? undefined : "lazy"}
+      loading={priority ? undefined : eager ? "eager" : "lazy"}
       sizes="(min-width: 1024px) 60vw, 85vw"
       className="object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
     />

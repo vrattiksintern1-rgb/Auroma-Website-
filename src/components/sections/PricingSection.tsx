@@ -13,15 +13,17 @@ export function PricingSection({
   exclusions,
   revision,
   cta,
+  id,
 }: {
   kicker: string;
   headlinePrefix: string;
   exclusions: string;
   revision: string;
   cta: string;
+  id?: string;
 }) {
   return (
-    <section className="bg-midnight-texture px-6 py-20 text-center sm:px-8 sm:py-28">
+    <section id={id} className="scroll-mt-20 bg-midnight-texture px-6 py-20 text-center sm:px-8 sm:py-28">
       <div className="mx-auto max-w-xl">
         <Reveal>
           <Eyebrow tone="gold-light">{kicker}</Eyebrow>

@@ -179,6 +179,22 @@ export function IconKey(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function IconMenu(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M4 6.5 H20 M4 12 H20 M4 17.5 H20" />
+    </svg>
+  );
+}
+
+export function IconClose(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M5.5 5.5 L18.5 18.5 M18.5 5.5 L5.5 18.5" />
+    </svg>
+  );
+}
+
 export function IconDownload(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...base} {...props}>

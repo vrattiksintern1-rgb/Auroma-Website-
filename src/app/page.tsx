@@ -75,6 +75,7 @@ export default function HomePage() {
         <LocationSection id="location" comeForLabel="What your guests will come for" />
         <PlansSection id="plans" />
         <PricingSection
+          id="pricing"
           kicker={lpB.pricing.kicker}
           headlinePrefix={lpB.pricing.headlinePrefix}
           exclusions={lpB.pricing.exclusions}

@@ -45,7 +45,7 @@ export function Hero({ kicker, line1, line2, body, priceLine, cta, image }: Hero
             mounted ? "scale-[1.06]" : "scale-100"
           }`}
         />
-        <div className="absolute inset-0 bg-midnight/55" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(28,43,53,0.18)_0%,rgba(28,43,53,0.62)_55%,rgba(28,43,53,0.85)_100%)] sm:bg-[linear-gradient(to_right,rgba(28,43,53,0.82)_0%,rgba(28,43,53,0.62)_45%,rgba(28,43,53,0.18)_100%)]" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32">
@@ -76,7 +76,7 @@ export function Hero({ kicker, line1, line2, body, priceLine, cta, image }: Hero
           </p>
 
           <p
-            className={`mt-6 font-label text-[15px] tracking-[0.16em] text-gold-light sm:text-xl ${step()}`}
+            className={`mt-6 font-label text-[26px] font-normal tracking-[0.04em] text-gold-light sm:text-[32px] ${step()}`}
             style={delay(600)}
           >
             {priceLine}

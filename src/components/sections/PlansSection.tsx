@@ -43,10 +43,7 @@ export function PlansSection({ id }: { id?: string }) {
                     : "border-slate/15 bg-white/40 hover:-translate-y-0.5 hover:border-gold/50 hover:bg-white hover:shadow-md hover:shadow-midnight/5"
                 }`}
               >
-                <span className="block font-label text-[10.5px] tracking-[0.14em] uppercase text-gold">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="mt-1 block font-body text-[14px] font-bold text-midnight sm:text-[15px]">
+                <span className="block font-body text-[14px] font-bold text-midnight sm:text-[15px]">
                   {f.label}
                 </span>
               </button>

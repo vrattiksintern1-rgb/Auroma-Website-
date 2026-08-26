@@ -6,8 +6,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { IconBadge } from "@/components/ui/Card";
-import { IconChat, IconPin, IconKey } from "@/components/ui/icons";
-import { confirmationCopy, faqShared } from "@/content/shared";
+import { IconPin } from "@/components/ui/icons";
+import { confirmationCopy } from "@/content/shared";
 import { submitLead } from "@/lib/leadService";
 import { trackEvent } from "@/lib/analytics";
 import { investmentRangeOptions } from "@/content/types";
@@ -122,13 +122,7 @@ export function LeadForm({
 
             <div className="mt-10 space-y-5">
               <Reveal delay={200}>
-                <InfoCard icon={IconChat} title="On WhatsApp" body={confirmationCopy.body} />
-              </Reveal>
-              <Reveal delay={250}>
                 <InfoCard icon={IconPin} title="Location" body="Near Auroville, Pondicherry" />
-              </Reveal>
-              <Reveal delay={300}>
-                <InfoCard icon={IconKey} title="Availability" body={faqShared.howManyAvailable.a} />
               </Reveal>
             </div>
           </div>
