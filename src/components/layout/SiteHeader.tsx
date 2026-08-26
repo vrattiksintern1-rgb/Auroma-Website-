@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
 
@@ -15,6 +14,42 @@ const navLinks = [
   { href: "#form", label: "Contact" },
 ];
 
+function HeaderLogo() {
+  return (
+    <span className="flex items-center gap-3">
+      <svg
+        viewBox="0 0 86 72"
+        className="h-10 w-12 shrink-0 text-gold-light sm:h-11 sm:w-14"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M9 64 36 15c3.1-5.7 11.2-5.7 14.4 0L78 64"
+          stroke="currentColor"
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M41.8 34.5 28.4 58.2c-1.6 2.8.4 6.3 3.7 6.3h26"
+          stroke="currentColor"
+          strokeWidth="8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <span className="flex flex-col justify-center leading-none">
+        <span className="font-display text-xl font-normal tracking-[0.05em] text-paper antialiased sm:text-2xl">
+          AUROMA
+        </span>
+        <span className="mt-1 font-label text-[10px] font-medium uppercase tracking-[0.34em] text-gold-light antialiased sm:text-xs">
+          HOLIDAY VILLAS
+        </span>
+      </span>
+    </span>
+  );
+}
+
 export function SiteHeader({ cta }: { cta: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -27,21 +62,18 @@ export function SiteHeader({ cta }: { cta: string }) {
   }, [menuOpen]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-midnight">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-3 sm:px-8 sm:py-3.5">
-        <a href="#top" className="shrink-0" aria-label="Auroma Holiday Villas — back to top">
-          <Image
-            src="/images/logo/logo-lockup-gold.png"
-            alt="Auroma Holiday Villas"
-            width={321}
-            height={330}
-            className="h-14 w-14 object-contain object-left sm:h-18 sm:w-18 lg:h-20 lg:w-20"
-            priority
-          />
+    <header className="fixed inset-x-0 top-0 z-50 overflow-visible bg-midnight">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-3 pr-7 sm:px-8 sm:py-3.5 sm:pr-10 xl:pr-12">
+        <a
+          href="#top"
+          className="flex h-12 w-48 shrink-0 items-center justify-start sm:h-14 sm:w-56"
+          aria-label="Auroma Holiday Villas — back to top"
+        >
+          <HeaderLogo />
         </a>
 
-        <div className="hidden items-center gap-10 lg:flex">
-          <nav className="flex items-center gap-10" aria-label="Section navigation">
+        <div className="hidden min-w-0 flex-wrap items-center justify-end gap-5 xl:flex 2xl:gap-8">
+          <nav className="flex min-w-0 flex-wrap items-center justify-end gap-x-6 gap-y-2 2xl:gap-x-8" aria-label="Section navigation">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -56,7 +88,7 @@ export function SiteHeader({ cta }: { cta: string }) {
           <Button
             href="#form"
             variant="primary"
-            className="!px-8 !py-4 text-[15px] shrink-0"
+            className="shrink-0 !px-7 !py-3.5 text-[15px] 2xl:!px-8 2xl:!py-4"
             onClick={() => trackEvent("hero_cta_click", { location: "header" })}
           >
             {cta}
@@ -68,7 +100,7 @@ export function SiteHeader({ cta }: { cta: string }) {
           onClick={() => setMenuOpen(true)}
           aria-label="Open menu"
           aria-expanded={menuOpen}
-          className="flex h-11 w-11 items-center justify-center rounded-full border border-mist/40 text-paper lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-mist/40 text-paper xl:hidden"
         >
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
             <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
@@ -77,15 +109,11 @@ export function SiteHeader({ cta }: { cta: string }) {
       </div>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-50 bg-midnight lg:hidden">
+        <div className="fixed inset-0 z-50 bg-midnight xl:hidden">
           <div className="flex items-center justify-between px-5 py-3">
-            <Image
-              src="/images/logo/logo-lockup-gold.png"
-              alt="Auroma Holiday Villas"
-              width={321}
-              height={330}
-              className="h-12 w-12 object-contain object-left"
-            />
+            <div className="flex h-12 w-48 items-center justify-start">
+              <HeaderLogo />
+            </div>
             <button
               type="button"
               onClick={() => setMenuOpen(false)}

@@ -26,8 +26,12 @@ export function HostingSection({
   id?: string;
 }) {
   const pairedImage: Record<number, ImageAsset> = {
-    1: villaImages.courtyardPool,
-    2: villaImages.gameRoomTerrace,
+    0: villaImages.bedroomWindow,
+    1: villaImages.poolCourtyard,
+    2: villaImages.solarPoolAerial,
+    3: villaImages.livingDiningKitchen,
+    4: villaImages.diningStair,
+    5: villaImages.exteriorGate,
   };
 
   return (

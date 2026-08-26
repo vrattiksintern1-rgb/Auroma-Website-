@@ -8,7 +8,7 @@ import { plans, planImages } from "@/content/shared";
 import { PENDING } from "@/content/pending";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 
-const planImageByFloor = [planImages.ground, planImages.first, null];
+const planImageByFloor = [planImages.ground, planImages.first, planImages.second];
 
 export function PlansSection({ id }: { id?: string }) {
   const [active, setActive] = useState(0);

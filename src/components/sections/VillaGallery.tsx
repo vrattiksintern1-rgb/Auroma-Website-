@@ -8,7 +8,22 @@ import { IconBadge } from "@/components/ui/Card";
 import { IconPool, IconGrid, IconSprout, IconSofa, IconCar } from "@/components/ui/icons";
 import { villaImages, galleryAmenities, galleryCaption } from "@/content/shared";
 
-const images = [villaImages.elevation, villaImages.courtyardPool, villaImages.gameRoomTerrace, villaImages.diningStair];
+const images = [
+  villaImages.exteriorFront,
+  villaImages.poolCourtyard,
+  villaImages.livingRoom,
+  villaImages.livingDiningKitchen,
+  villaImages.kitchen,
+  villaImages.diningFoyer,
+  villaImages.diningStair,
+  villaImages.diningRoom,
+  villaImages.bedroomSuite,
+  villaImages.bedroomNiche,
+  villaImages.bedroomWindow,
+  villaImages.bathroomTub,
+  villaImages.solarRoofTerrace,
+  villaImages.exteriorSideAngle,
+];
 const amenityIcons = [IconPool, IconGrid, IconSprout, IconSofa, IconCar];
 
 export function VillaGallery({
@@ -58,22 +73,18 @@ export function VillaGallery({
         </div>
       </div>
 
-      {/* Desktop: asymmetric editorial grid */}
-      <div className="mx-auto mt-12 hidden max-w-[1300px] px-6 sm:px-8 lg:mt-16 lg:grid lg:grid-cols-6 lg:grid-rows-2 lg:gap-4">
-        <div className="relative col-span-4 row-span-2 aspect-[4/3] overflow-hidden rounded-xl shadow-2xl shadow-midnight/10 lg:aspect-auto">
-          <GalleryImage img={images[0]} priority />
-        </div>
-        <div className="relative col-span-2 aspect-square overflow-hidden rounded-xl shadow-xl shadow-midnight/10">
-          <GalleryImage img={images[1]} />
-        </div>
-        <div className="relative col-span-2 aspect-square overflow-hidden rounded-xl shadow-xl shadow-midnight/10">
-          <GalleryImage img={images[2]} />
-        </div>
-      </div>
-      <div className="mx-auto mt-4 hidden max-w-[1300px] px-6 sm:px-8 lg:grid lg:grid-cols-6 lg:gap-4">
-        <div className="relative col-span-6 aspect-[21/9] overflow-hidden rounded-xl shadow-2xl shadow-midnight/10">
-          <GalleryImage img={images[3]} />
-        </div>
+      {/* Desktop: masonry stack keeps mixed image sizes tight with no empty grid cells. */}
+      <div className="mx-auto mt-12 hidden max-w-[1300px] columns-3 gap-4 px-6 sm:px-8 lg:mt-16 lg:block">
+        {images.map((img, i) => (
+          <div
+            key={img.src}
+            className={`relative mb-4 break-inside-avoid overflow-hidden rounded-xl shadow-xl shadow-midnight/10 ${
+              i === 0 || i === 3 || i === 12 ? "aspect-[16/10]" : "aspect-[4/3]"
+            }`}
+          >
+            <GalleryImage img={img} priority={i === 0} />
+          </div>
+        ))}
       </div>
 
       {/* Mobile / tablet: swipeable carousel */}

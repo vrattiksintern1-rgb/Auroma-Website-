@@ -68,6 +68,7 @@ export default function HomePage() {
           closing={lpB.dilemma.closing}
           accent="a return."
           tone="light"
+          image={villaImages.livingDiningKitchen}
         />
         <TensionSection
           id="about"
@@ -76,6 +77,7 @@ export default function HomePage() {
           points={[...lpB.answer.points]}
           closing={lpB.answer.closing}
           accent="Auroma Holiday Villas."
+          image={villaImages.exteriorFrontAngle}
         />
         <HostingSection
           id="amenities"

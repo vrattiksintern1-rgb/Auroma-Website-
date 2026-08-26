@@ -37,7 +37,7 @@ export const PENDING = {
   /** Registered/office address for the footer "Reach Us" column. */
   reachUsAddress: null as string | null,
   /** Phone number(s) for the footer "Reach Us" column. */
-  reachUsPhones: null as string[] | null,
+  reachUsPhones: ["+91 916229955"] as string[] | null,
   /** Contact email for the footer "Reach Us" column. */
-  reachUsEmail: null as string | null,
+  reachUsEmail: "hello@auromaholidayvillas.com" as string | null,
 } as const;

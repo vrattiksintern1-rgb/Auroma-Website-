@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 import { withAccent } from "@/components/ui/Accent";
+import type { ImageAsset } from "@/content/types";
 
 interface Point {
   title: string;
@@ -16,6 +18,7 @@ export function TensionSection({
   accent,
   id,
   tone = "dark",
+  image,
 }: {
   eyebrow?: string;
   headline: string;
@@ -25,6 +28,7 @@ export function TensionSection({
   accent?: string;
   id?: string;
   tone?: "dark" | "light";
+  image?: ImageAsset;
 }) {
   const isLight = tone === "light";
 
@@ -33,8 +37,9 @@ export function TensionSection({
       id={id}
       className={`scroll-mt-20 px-6 py-20 sm:px-8 sm:py-28 ${isLight ? "bg-sand-texture" : "bg-midnight-texture"}`}
     >
-      <div className="mx-auto max-w-[760px]">
-        <div className="text-center">
+      <div className={`mx-auto ${image ? "grid max-w-[1180px] grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_430px] lg:items-center lg:gap-16" : "max-w-[760px]"}`}>
+        <div>
+        <div className={image ? "text-left" : "text-center"}>
           {eyebrow && (
             <Reveal>
               <span
@@ -72,7 +77,7 @@ export function TensionSection({
           </Reveal>
 
           <Reveal delay={190}>
-            <SectionDivider className="mt-7 sm:mt-8" />
+            <SectionDivider align={image ? "start" : "center"} className="mt-7 sm:mt-8" />
           </Reveal>
         </div>
 
@@ -101,13 +106,33 @@ export function TensionSection({
 
         <Reveal delay={200 + points.length * 90 + 100}>
           <p
-            className={`mt-14 text-center font-display text-2xl italic sm:text-3xl ${
+            className={`mt-14 font-display text-2xl italic sm:text-3xl ${image ? "text-left" : "text-center"} ${
               isLight ? "text-gold" : "text-gold-light"
             }`}
           >
             {closing}
           </p>
         </Reveal>
+        </div>
+
+        {image && (
+          <Reveal delay={240} className="lg:sticky lg:top-28">
+            <div
+              className={`relative aspect-[4/5] overflow-hidden rounded-xl border shadow-2xl ${
+                isLight ? "border-slate/10 shadow-midnight/10" : "border-mist/15 shadow-midnight/30"
+              }`}
+            >
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                sizes="(min-width: 1024px) 430px, 90vw"
+                loading="lazy"
+                className="object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
+              />
+            </div>
+          </Reveal>
+        )}
       </div>
     </section>
   );
