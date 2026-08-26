@@ -12,11 +12,13 @@ export type AnalyticsEvent =
   | "mid_page_cta_click"
   | "pricing_cta_click"
   | "form_start"
-  | "lead" // Step 1 submit — the optimisation event
-  | "qualified_lead" // Step 2 submit
+  | "lead" // form submit — the campaign optimisation event
+  | "brochure_form_start"
+  | "brochure_download" // gated brochure PDF download
   | "whatsapp_open"
   | "scroll_50"
-  | "scroll_90";
+  | "scroll_90"
+  | "gallery_open";
 
 export function trackEvent(event: AnalyticsEvent, payload: Record<string, unknown> = {}) {
   const detail = { event, page: typeof window !== "undefined" ? window.location.pathname : "", ...payload };

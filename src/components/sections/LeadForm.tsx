@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type ComponentType, type SubmitEvent, type SVGProps } from "react";
+import { useRef, useState, type ComponentType, type FormEvent, type SVGProps } from "react";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionDivider } from "@/components/ui/SectionDivider";
@@ -8,11 +8,12 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { IconBadge } from "@/components/ui/Card";
 import { IconChat, IconPin, IconKey } from "@/components/ui/icons";
 import { confirmationCopy, faqShared } from "@/content/shared";
-import { submitStep1, submitStep2 } from "@/lib/leadService";
+import { submitLead } from "@/lib/leadService";
 import { trackEvent } from "@/lib/analytics";
-import type { PageVariant, Step1Data, Step2Data } from "@/content/types";
+import { investmentRangeOptions } from "@/content/types";
+import type { LeadFormData, PageVariant } from "@/content/types";
 
-type Stage = "form" | "qualify" | "done";
+type Stage = "form" | "done";
 
 const inputClasses =
   "rounded-lg border border-slate/20 bg-sand/30 px-4 py-3 font-body text-[15px] text-midnight " +
@@ -30,10 +31,8 @@ export function LeadForm({
   body: string;
 }) {
   const [stage, setStage] = useState<Stage>("form");
-  const [leadId, setLeadId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [name, setName] = useState("");
   const startedTracking = useRef(false);
 
   const onFirstFocus = () => {
@@ -43,56 +42,50 @@ export function LeadForm({
     }
   };
 
-  async function handleStep1(e: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
     const form = new FormData(e.currentTarget);
 
-    const data: Step1Data = {
-      fullName: String(form.get("fullName") || "").trim(),
-      countryCode: String(form.get("countryCode") || "+91"),
-      whatsappNumber: String(form.get("whatsappNumber") || "").trim(),
-      email: String(form.get("email") || "").trim(),
-      consent: form.get("consent") === "on",
-    };
+    const fullName = String(form.get("fullName") || "").trim();
+    const whatsappDigits = String(form.get("whatsappNumber") || "").replace(/[\s-]/g, "");
+    const city = String(form.get("city") || "").trim();
+    const investmentRange = String(form.get("investmentRange") || "").trim();
+    const consent = form.get("consent") === "on";
 
-    if (!data.consent) {
+    if (fullName.length < 2) {
+      setError("Please enter your full name.");
+      return;
+    }
+    if (!/^\d{10}$/.test(whatsappDigits)) {
+      setError("Please enter a 10-digit WhatsApp number.");
+      return;
+    }
+    if (city.length < 2) {
+      setError("Please enter your city.");
+      return;
+    }
+    if (!investmentRange) {
+      setError("Please select an investment range.");
+      return;
+    }
+    if (!consent) {
       setError("Please confirm you'd like the brochure on WhatsApp — this box can't be pre-ticked.");
       return;
     }
 
-    setSubmitting(true);
-    try {
-      const res = await submitStep1(data, variant);
-      setLeadId(res.leadId);
-      setName(data.fullName.split(" ")[0] || data.fullName);
-      trackEvent("lead", { variant });
-      setStage("qualify");
-    } catch {
-      setError("Something went wrong — please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleStep2(e: SubmitEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!leadId) return;
-    setError(null);
-    const form = new FormData(e.currentTarget);
-
-    const data: Step2Data = {
-      lookingTo: (form.get("lookingTo") as Step2Data["lookingTo"]) || "",
-      budgetRange: String(form.get("budgetRange") || "").trim(),
-      timeline: (form.get("timeline") as Step2Data["timeline"]) || "",
-      aurovilleVisited: (form.get("aurovilleVisited") as Step2Data["aurovilleVisited"]) || "",
-      city: String(form.get("city") || "").trim(),
+    const data: LeadFormData = {
+      fullName,
+      whatsappNumber: `+91${whatsappDigits}`,
+      city,
+      investmentRange: investmentRange as LeadFormData["investmentRange"],
+      consent,
     };
 
     setSubmitting(true);
     try {
-      await submitStep2(leadId, data);
-      trackEvent("qualified_lead", { variant });
+      await submitLead(data, variant);
+      trackEvent("lead", { variant });
       setStage("done");
     } catch {
       setError("Something went wrong — please try again.");
@@ -119,7 +112,11 @@ export function LeadForm({
             </Reveal>
             <Reveal delay={160}>
               <p className="mt-6 max-w-md font-body text-[14.5px] leading-relaxed text-sand/80 sm:text-[15px]">
-                {body}
+                {body.split("\n").map((line, i) => (
+                  <span key={i} className="block">
+                    {line}
+                  </span>
+                ))}
               </p>
             </Reveal>
 
@@ -139,164 +136,120 @@ export function LeadForm({
           <div className="rounded-2xl bg-white p-7 shadow-2xl shadow-black/20 sm:p-10 lg:self-start">
             {stage === "form" && (
               <Reveal delay={100}>
-                <form onSubmit={handleStep1} onFocus={onFirstFocus} noValidate className="space-y-6">
-                <div>
-                  <label htmlFor="fullName" className={labelClasses}>
-                    Full name *
-                  </label>
-                  <input
-                    id="fullName"
-                    name="fullName"
-                    required
-                    autoComplete="name"
-                    className={`${inputClasses} w-full`}
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="whatsappNumber" className={labelClasses}>
-                    WhatsApp number *
-                  </label>
-                  <div className="flex gap-3">
+                <form onSubmit={handleSubmit} onFocus={onFirstFocus} noValidate className="space-y-6">
+                  <div>
+                    <label htmlFor="fullName" className={labelClasses}>
+                      Full name *
+                    </label>
                     <input
-                      name="countryCode"
-                      defaultValue="+91"
-                      aria-label="Country code"
-                      className={`${inputClasses} w-16 shrink-0`}
-                    />
-                    <input
-                      id="whatsappNumber"
-                      name="whatsappNumber"
-                      type="tel"
-                      inputMode="tel"
+                      id="fullName"
+                      name="fullName"
                       required
-                      autoComplete="tel-national"
-                      className={`${inputClasses} min-w-0 flex-1`}
+                      minLength={2}
+                      autoComplete="name"
+                      className={`${inputClasses} w-full`}
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label htmlFor="email" className={labelClasses}>
-                    Email *
+                  <div>
+                    <label htmlFor="whatsappNumber" className={labelClasses}>
+                      WhatsApp number *
+                    </label>
+                    <div className="flex gap-3">
+                      <span
+                        aria-hidden="true"
+                        className={`${inputClasses} flex w-16 shrink-0 items-center justify-center bg-sand/50 text-slate`}
+                      >
+                        +91
+                      </span>
+                      <input
+                        id="whatsappNumber"
+                        name="whatsappNumber"
+                        type="tel"
+                        inputMode="tel"
+                        required
+                        pattern="[0-9\s-]{10,14}"
+                        maxLength={14}
+                        autoComplete="tel-national"
+                        placeholder="10-digit number"
+                        className={`${inputClasses} min-w-0 flex-1`}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="city" className={labelClasses}>
+                      City *
+                    </label>
+                    <input
+                      id="city"
+                      name="city"
+                      required
+                      minLength={2}
+                      autoComplete="address-level2"
+                      className={`${inputClasses} w-full`}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="investmentRange" className={labelClasses}>
+                      Investment range *
+                    </label>
+                    <select
+                      id="investmentRange"
+                      name="investmentRange"
+                      required
+                      defaultValue=""
+                      className={`${inputClasses} w-full`}
+                    >
+                      <option value="" disabled>
+                        Select a range
+                      </option>
+                      {investmentRangeOptions.map((range) => (
+                        <option key={range} value={range}>
+                          {range}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <label className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      name="consent"
+                      required
+                      className="mt-1 h-4 w-4 shrink-0 border-slate/40 accent-[#B8922A]"
+                    />
+                    <span className="font-body text-[13px] leading-relaxed text-slate">
+                      Send me the brochure and project updates on WhatsApp.
+                    </span>
                   </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    className={`${inputClasses} w-full`}
-                  />
-                </div>
 
-                <label className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    name="consent"
-                    required
-                    className="mt-1 h-4 w-4 shrink-0 border-slate/40 accent-[#B8922A]"
-                  />
-                  <span className="font-body text-[13px] leading-relaxed text-slate">
-                    Send me the brochure and project updates on WhatsApp.
-                  </span>
-                </label>
+                  {error && <p className="font-body text-[13px] text-[#8A3324]">{error}</p>}
 
-                {error && <p className="font-body text-[13px] text-[#8A3324]">{error}</p>}
+                  <Button type="submit" disabled={submitting} className="w-full">
+                    {submitting ? "Sending…" : confirmationCopy.submitCta}
+                  </Button>
 
-                <Button type="submit" disabled={submitting} className="w-full">
-                  {submitting ? "Sending…" : confirmationCopy.step1Cta}
-                </Button>
-              </form>
-            </Reveal>
-          )}
+                  <p className="text-center font-body text-[12px] text-slate/60">
+                    <a href="/privacy" className="underline decoration-slate/30 underline-offset-4 hover:text-gold">
+                      Privacy Policy
+                    </a>
+                  </p>
+                </form>
+              </Reveal>
+            )}
 
-        {stage === "qualify" && (
-          <Reveal>
-            <h2 className="font-display text-3xl font-normal text-midnight sm:text-4xl">
-              {confirmationCopy.headline}
-            </h2>
-            <p className="mt-3 font-body text-[14px] leading-relaxed text-slate sm:text-[15px]">
-              {confirmationCopy.body}
-            </p>
-            <p className="mt-2 font-body text-[14px] leading-relaxed text-slate sm:text-[15px]">
-              {confirmationCopy.bridge}
-            </p>
-
-            <form onSubmit={handleStep2} className="mt-10 space-y-8">
-              <RadioGroup
-                name="lookingTo"
-                legend="Are you looking to"
-                options={[
-                  { value: "let-it-out", label: "Let it out" },
-                  { value: "use-it-myself", label: "Use it myself" },
-                  { value: "both", label: "Both" },
-                ]}
-              />
-
-              <div>
-                <label htmlFor="budgetRange" className={labelClasses}>
-                  Budget range (optional)
-                </label>
-                <input
-                  id="budgetRange"
-                  name="budgetRange"
-                  placeholder="Any range in mind"
-                  className={`${inputClasses} w-full`}
-                />
-                <p className="mt-1.5 font-body text-[12px] text-slate/60">
-                  Exact bands will follow once pricing is confirmed.
+            {stage === "done" && (
+              <Reveal>
+                <h2 className="font-display text-3xl font-normal text-midnight sm:text-4xl">
+                  {confirmationCopy.headline}
+                </h2>
+                <p className="mt-3 font-body text-[15px] leading-relaxed text-slate">
+                  {confirmationCopy.body}
                 </p>
-              </div>
-
-              <RadioGroup
-                name="timeline"
-                legend="Timeline"
-                options={[
-                  { value: "within-3-months", label: "Within 3 months" },
-                  { value: "3-6-months", label: "3–6 months" },
-                  { value: "6-12-months", label: "6–12 months" },
-                  { value: "exploring", label: "Exploring" },
-                ]}
-              />
-
-              <RadioGroup
-                name="aurovilleVisited"
-                legend="Have you been to Auroville?"
-                options={[
-                  { value: "yes", label: "Yes" },
-                  { value: "no", label: "No" },
-                  { value: "often", label: "Often" },
-                ]}
-              />
-
-              <div>
-                <label htmlFor="city" className={labelClasses}>
-                  City you&apos;re based in
-                </label>
-                <input id="city" name="city" className={`${inputClasses} w-full`} />
-              </div>
-
-              {error && <p className="font-body text-[13px] text-[#8A3324]">{error}</p>}
-
-              <Button type="submit" disabled={submitting} className="w-full">
-                {submitting ? "Sending…" : confirmationCopy.step2Cta}
-              </Button>
-            </form>
-          </Reveal>
-        )}
-
-        {stage === "done" && (
-          <Reveal>
-            <h2 className="font-display text-3xl font-normal text-midnight sm:text-4xl">
-              {confirmationCopy.doneHeadline}
-            </h2>
-            <p className="mt-3 font-body text-[15px] leading-relaxed text-slate">
-              {name ? `${name}, w` : "W"}
-              {confirmationCopy.doneBody.slice(1)}
-            </p>
-          </Reveal>
-        )}
+              </Reveal>
+            )}
           </div>
         </div>
       </div>
@@ -323,32 +276,5 @@ function InfoCard({
         <p className="mt-1.5 font-body text-[13.5px] leading-relaxed text-sand/85">{body}</p>
       </div>
     </div>
-  );
-}
-
-function RadioGroup({
-  name,
-  legend,
-  options,
-}: {
-  name: string;
-  legend: string;
-  options: { value: string; label: string }[];
-}) {
-  return (
-    <fieldset>
-      <legend className={labelClasses}>{legend}</legend>
-      <div className="flex flex-wrap gap-2.5">
-        {options.map((opt) => (
-          <label
-            key={opt.value}
-            className="cursor-pointer rounded-lg border border-slate/25 px-4 py-2.5 font-body text-[13px] text-midnight transition-all duration-300 hover:border-gold/60 hover:bg-gold/5 has-[:checked]:border-gold has-[:checked]:bg-gold has-[:checked]:text-paper has-[:checked]:shadow-md has-[:checked]:shadow-gold/20"
-          >
-            <input type="radio" name={name} value={opt.value} className="sr-only" />
-            {opt.label}
-          </label>
-        ))}
-      </div>
-    </fieldset>
   );
 }

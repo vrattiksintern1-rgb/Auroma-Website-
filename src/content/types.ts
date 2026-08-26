@@ -7,29 +7,31 @@ export interface ImageAsset {
   height: number;
 }
 
-export interface Step1Data {
+export const investmentRangeOptions = [
+  "₹2.5 crore – ₹3 crore",
+  "₹3 crore – ₹3.5 crore",
+  "₹3.5 crore +",
+] as const;
+
+export type InvestmentRange = (typeof investmentRangeOptions)[number];
+
+export interface LeadFormData {
   fullName: string;
   whatsappNumber: string;
-  countryCode: string;
-  email: string;
+  city: string;
+  investmentRange: InvestmentRange | "";
   consent: boolean;
 }
 
-export type LookingTo = "let-it-out" | "use-it-myself" | "both";
-export type Timeline = "within-3-months" | "3-6-months" | "6-12-months" | "exploring";
-export type AurovilleVisited = "yes" | "no" | "often";
-
-export interface Step2Data {
-  lookingTo: LookingTo | "";
-  budgetRange: string;
-  timeline: Timeline | "";
-  aurovilleVisited: AurovilleVisited | "";
-  city: string;
-}
-
-export interface LeadRecord extends Step1Data {
+export interface LeadRecord extends LeadFormData {
   variant: PageVariant;
   sourcePage: string;
   utm: Record<string, string>;
   consentTimestamp: string;
+}
+
+export interface BrochureLeadData {
+  name: string;
+  email: string;
+  phone: string;
 }

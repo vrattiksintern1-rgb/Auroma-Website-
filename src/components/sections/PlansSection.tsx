@@ -5,7 +5,6 @@ import Image from "next/image";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { plans, planImages } from "@/content/shared";
-import { PENDING } from "@/content/pending";
 import { SectionDivider } from "@/components/ui/SectionDivider";
 
 const planImageByFloor = [planImages.ground, planImages.first, planImages.second];
@@ -101,6 +100,11 @@ export function PlansSection({ id }: { id?: string }) {
                 <FloorStat label="Semi-open" value={areaRow.semiOpen} />
                 <FloorStat label="Total" value={areaRow.total} />
               </div>
+              {"semiOpenNote" in areaRow && areaRow.semiOpenNote && (
+                <p className="mt-3 text-center font-body text-[12px] text-slate/60">
+                  Semi-open: {areaRow.semiOpenNote}
+                </p>
+              )}
             </div>
           </div>
         </Reveal>
@@ -111,11 +115,7 @@ export function PlansSection({ id }: { id?: string }) {
             <AreaStat label="Semi-open" value={plans.areas.semiOpen} />
             <AreaStat label="Total" value={plans.areas.total} />
           </div>
-          {!PENDING.carpetAreaSqFt && (
-            <p className="mt-6 font-body text-[12.5px] text-slate/60">
-              Carpet area and plot area to follow.
-            </p>
-          )}
+          <p className="mt-6 font-body text-[12.5px] text-slate/60">All figures in sq. ft.</p>
         </Reveal>
       </div>
     </section>

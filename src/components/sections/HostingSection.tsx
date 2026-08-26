@@ -25,13 +25,14 @@ export function HostingSection({
   points: Point[];
   id?: string;
 }) {
-  const pairedImage: Record<number, ImageAsset> = {
+  // Per BUILD-SPEC v3 §5.4 image assignments.
+  const pairedImage: Partial<Record<number, ImageAsset>> = {
     0: villaImages.bedroomWindow,
     1: villaImages.poolCourtyard,
-    2: villaImages.solarPoolAerial,
-    3: villaImages.livingDiningKitchen,
-    4: villaImages.diningStair,
-    5: villaImages.exteriorGate,
+    2: villaImages.solarRoofTerrace,
+    3: villaImages.livingRoom,
+    4: villaImages.bedroomNiche,
+    5: villaImages.exteriorFront,
   };
 
   return (

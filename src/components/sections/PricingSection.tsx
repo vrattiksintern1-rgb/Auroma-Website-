@@ -49,14 +49,6 @@ export function PricingSection({
           <p className="mt-2 font-body text-[14px] leading-relaxed text-mist sm:text-[15px]">{revision}</p>
         </Reveal>
 
-        <Reveal delay={200}>
-          <p className="mt-8 font-display text-xl italic text-gold-light sm:text-2xl">
-            {PENDING.villasRemaining !== null
-              ? `Of three villas, ${PENDING.villasRemaining} remain.`
-              : "Three villas. That is the entire project."}
-          </p>
-        </Reveal>
-
         <Reveal delay={260}>
           <div className="mt-10">
             <Button href="#form" onClick={() => trackEvent("pricing_cta_click")}>

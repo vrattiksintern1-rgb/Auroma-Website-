@@ -178,3 +178,13 @@ export function IconKey(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function IconDownload(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 3.5 V14.5" />
+      <path d="M7.5 10 L12 14.5 L16.5 10" />
+      <path d="M4.5 18.5 H19.5" />
+    </svg>
+  );
+}

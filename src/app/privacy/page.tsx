@@ -15,10 +15,8 @@ export default function PrivacyPage() {
 
       <div className="mt-10 space-y-6 font-body text-[15px] leading-relaxed text-slate">
         <p>
-          When you submit the brochure request form on this site, we collect your name, WhatsApp
-          number, email address, and — if you complete the second step — a small set of
-          qualification details (whether you&apos;re looking to host or use the villa yourself, your
-          general timeline, whether you&apos;ve visited Auroville, and your city).
+          When you submit the brochure request form on this site, we collect your full name,
+          WhatsApp number, city, and the investment range you select.
         </p>
         <p>
           This information is used only to send you the Auroma Holiday Villas brochure, respond to

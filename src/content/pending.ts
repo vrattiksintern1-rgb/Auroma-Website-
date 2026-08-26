@@ -5,10 +5,8 @@
  * conditional render gates, not optional copy.
  */
 export const PENDING = {
-  /** From ₹[X] — awaiting price band + inclusions from client. */
-  priceFrom: null as string | null,
-  /** "Of three villas, [N] remain." */
-  villasRemaining: null as number | null,
+  /** Published per BUILD-SPEC v3 §1, §5.1, §5.11 — must match the hero figure. */
+  priceFrom: "₹2.5 crore" as string | null,
   /** 300dpi approved portrait of Ar. Trupti Doshi. */
   architectPortraitUrl: "/images/team/trupti-doshi.jpg" as string | null,
   /** Which project holds the GRIHA 5-Star rating. */
@@ -24,20 +22,14 @@ export const PENDING = {
   plotAreaSqFt: null as number | null,
   /** Construction and handover schedule. */
   handoverSchedule: null as string | null,
-  /** WhatsApp Business number the wa.me links resolve to. */
-  whatsappNumber: null as string | null,
+  /** WhatsApp Business number the wa.me links resolve to (§5.14). */
+  whatsappNumber: "+91 91762 29955" as string | null,
   /**
    * RERA exemption opinion from counsel, accounting for Phases 1–4 on the
    * same land. Blocks all ad spend on LP-B until confirmed in writing —
    * the FAQ answer must not be published until this is set.
    */
   reraOpinionConfirmed: false,
-  /** Short description/role line for The Auroma Group, footer "Developer" column. */
-  developerDescription: null as string | null,
-  /** Registered/office address for the footer "Reach Us" column. */
-  reachUsAddress: null as string | null,
-  /** Phone number(s) for the footer "Reach Us" column. */
-  reachUsPhones: ["+91 916229955"] as string[] | null,
-  /** Contact email for the footer "Reach Us" column. */
+  /** Contact email for the footer. */
   reachUsEmail: "hello@auromaholidayvillas.com" as string | null,
 } as const;

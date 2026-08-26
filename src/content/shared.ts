@@ -43,7 +43,7 @@ export const villaImages = {
   },
   groundFloorPlanDetail: {
     src: "/images/villa/ground-floor-plan-detail.jpg",
-    alt: "Ground floor plan detail showing the living areas, courtyard, bathrooms and planted pool edge.",
+    alt: "Ground floor plan detail showing the living areas, courtyard, bathrooms and planted plunge pool edge.",
     width: 973,
     height: 1600,
   },
@@ -55,7 +55,7 @@ export const villaImages = {
   },
   poolCourtyard: {
     src: "/images/villa/pool-courtyard.jpg",
-    alt: "Private courtyard pool with bamboo landscaping at the villa entrance.",
+    alt: "Private courtyard plunge pool with bamboo landscaping at the villa entrance.",
     width: 1600,
     height: 971,
   },
@@ -73,7 +73,7 @@ export const villaImages = {
   },
   solarPoolAerial: {
     src: "/images/villa/solar-pool-aerial.jpg",
-    alt: "Aerial view showing the villa roof terrace, solar panels and private pool.",
+    alt: "Aerial view showing the villa roof terrace, solar panels and private plunge pool.",
     width: 1600,
     height: 900,
   },
@@ -142,7 +142,7 @@ export const villaImages = {
 export const planImages = {
   ground: {
     src: "/images/plans/ground-floor.jpg",
-    alt: "Ground floor plan — living, dining, kitchen, pool and covered parking.",
+    alt: "Ground floor plan showing living, dining, kitchen, plunge pool and parking.",
     width: 2480,
     height: 3508,
   },
@@ -196,16 +196,16 @@ export const architect = {
     { stat: "5,00,000+ sq. ft.", detail: "of eco-spaces designed around nature and wellness" },
     { stat: "200+ homeowners", detail: "who trusted the practice with a home" },
   ],
-  closing: "These three villas were drawn by her hand.",
+  closing: "This villa was drawn by her hand.",
 };
 
-export const galleryHeadline = "Three villas. No two identical.";
+export const galleryKicker = "THE VILLA";
 export const gallerySupportInvestor =
-  "Three storeys. A private pool at the door. A roof terrace under timber. Three bedrooms, four washrooms, sleeps eight.";
+  "Three storeys. A private plunge pool at the door. A roof terrace under timber.\nThree bedrooms, four washrooms, sleeps eight.";
 export const gallerySupportHome =
-  "Three bedrooms, each ensuite. A private pool at the door. An open terrace under timber, and a games room at the top of the house.";
+  "Three bedrooms, each ensuite. A private plunge pool at the door. An open terrace under timber, and a games room at the top of the house.";
 export const galleryAmenities = [
-  "Swimming pool",
+  "Private plunge pool",
   "Game room with pool table, chess and carrom",
   "Indoor landscaped garden",
   "Designer living, kitchen and dining",
@@ -254,7 +254,7 @@ export const plans = {
     {
       label: "Ground floor",
       detail:
-        "Living, dining and kitchen opening to a private pool and courtyard. Covered parking, guest washroom.",
+        "Living, dining and kitchen opening to a private plunge pool and courtyard. Covered parking, guest washroom.",
     },
     {
       label: "First floor",
@@ -263,16 +263,19 @@ export const plans = {
     {
       label: "Second floor",
       detail:
-        "Open terrace under a timber pergola. The games room, and the best seat in the house at six in the evening.",
+        "An open terrace under a timber pergola. The games room, solar array, and the best seat in the house at six in the evening.",
     },
   ],
+  // Area statement revised 17 August 2026 (BUILD-SPEC v3 §5.9) — these figures
+  // replace all previous ones. Ground floor semi-open splits into plunge pool
+  // (195 sq. ft.) and covered parking (145 sq. ft.).
   areas: {
     builtUp: "2,290 sq. ft.",
-    semiOpen: "920 sq. ft.",
-    total: "3,210 sq. ft.",
+    semiOpen: "815 sq. ft.",
+    total: "3,105 sq. ft.",
   },
   areaTable: [
-    { floor: "Ground floor", builtUp: 900, semiOpen: 445, total: 1345 },
+    { floor: "Ground floor", builtUp: 900, semiOpen: 340, total: 1240, semiOpenNote: "plunge pool 195 · parking 145" },
     { floor: "First floor", builtUp: 1075, semiOpen: 175, total: 1250 },
     { floor: "Second floor", builtUp: 315, semiOpen: 300, total: 615 },
   ],
@@ -301,29 +304,25 @@ export const faqShared = {
   isPartOfAuroville: {
     q: "Is this part of Auroville?",
     aInvestor:
-      "No. The villas are privately owned freehold homes near Auroville — about ten minutes from the Matrimandir. There is no affiliation with the Auroville Foundation, and ownership carries no membership or rights within Auroville.",
+      "No. The villa is a privately owned freehold home near Auroville — about ten minutes from the Matrimandir. There is no affiliation with the Auroville Foundation, and ownership carries no membership or rights within Auroville.",
     aHome:
-      "No. These are privately owned freehold homes near Auroville. There is no affiliation with the Auroville Foundation, and ownership carries no membership or rights within Auroville.",
+      "No. This is a privately owned freehold home near Auroville. There is no affiliation with the Auroville Foundation, and ownership carries no membership or rights within Auroville.",
   },
   howManyAvailable: {
     q: "How many are available?",
-    a: "Three villas in total. That's the whole project.",
+    a: "This villa is one of a small number in the project. Ask us on WhatsApp for current availability.",
   },
 };
 
 export const confirmationCopy = {
   headline: "On its way.",
   body: "Check WhatsApp — the brochure should be with you in about a minute.",
-  bridge: "A few quick questions will help us send you the right information. Takes thirty seconds.",
-  step2Cta: "Finish — and get a call back",
-  step1Cta: "Send me the brochure",
-  doneHeadline: "Thank you.",
-  doneBody: "We'll be in touch on WhatsApp shortly.",
+  submitCta: "Send me the brochure",
 };
 
 export const whatsappCopy = {
   immediate: (name: string) =>
-    `Hi ${name} — here's the Auroma Holiday Villas brochure. Three villas, ten minutes from the Matrimandir.`,
+    `Hi ${name} — here's the Auroma Holiday Villas brochure. A villa near Auroville, ten minutes from the Matrimandir.`,
   followUpInvestor: "Anything you'd like to know about how it's set up for hosting?",
   followUpHome: "Would you like the current price range?",
   coldNoSource: "Are you thinking of using it yourself, or letting it out too — or both?",

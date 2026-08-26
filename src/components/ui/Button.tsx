@@ -17,6 +17,15 @@ const variants: Record<Variant, string> = {
     "border border-slate/40 text-midnight hover:border-gold hover:text-gold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-midnight/10",
 };
 
+/**
+ * Exposes the button visual style as plain classes for the rare case where a
+ * real, uninterrupted <a> is required (e.g. a file download) instead of
+ * next/link's client-side navigation.
+ */
+export function buttonClasses(variant: Variant = "primary", className = "") {
+  return `${base} ${variants[variant]} ${className}`;
+}
+
 interface CommonProps {
   variant?: Variant;
   className?: string;
@@ -31,7 +40,7 @@ type ButtonAsButton = CommonProps &
 
 export function Button(props: ButtonAsLink | ButtonAsButton) {
   const { variant = "primary", className = "", children, ...rest } = props;
-  const classes = `${base} ${variants[variant]} ${className}`;
+  const classes = buttonClasses(variant, className);
 
   if ("href" in rest && rest.href) {
     const { href, ...anchorRest } = rest as AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };

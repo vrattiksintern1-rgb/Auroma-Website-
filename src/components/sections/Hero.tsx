@@ -4,21 +4,20 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { withAccent } from "@/components/ui/Accent";
 import { trackEvent } from "@/lib/analytics";
-import type { villaImages } from "@/content/shared";
+import type { ImageAsset } from "@/content/types";
 
 interface HeroProps {
   kicker: string;
-  headline: string;
+  line1: string;
+  line2: string;
   body: string;
+  priceLine: string;
   cta: string;
-  scarcity: string;
-  image: (typeof villaImages)["elevation"];
-  accent?: string;
+  image: ImageAsset;
 }
 
-export function Hero({ kicker, headline, body, cta, scarcity, image, accent }: HeroProps) {
+export function Hero({ kicker, line1, line2, body, priceLine, cta, image }: HeroProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -34,11 +33,7 @@ export function Hero({ kicker, headline, body, cta, scarcity, image, accent }: H
 
   return (
     <section className="relative flex min-h-[92svh] items-center overflow-hidden bg-midnight sm:min-h-[100svh]">
-      <div
-        className={`absolute inset-0 transition-opacity duration-[1400ms] ease-out ${
-          mounted ? "opacity-100" : "opacity-0"
-        }`}
-      >
+      <div className="absolute inset-0">
         <Image
           src={image.src}
           alt={image.alt}
@@ -46,10 +41,11 @@ export function Hero({ kicker, headline, body, cta, scarcity, image, accent }: H
           priority
           fetchPriority="high"
           sizes="100vw"
-          className="object-cover"
+          className={`object-cover transition-transform duration-[20000ms] ease-out ${
+            mounted ? "scale-[1.06]" : "scale-100"
+          }`}
         />
-        <div className="absolute inset-0 bg-midnight/60" />
-        <div className="absolute inset-0 bg-gradient-to-t from-midnight via-midnight/30 to-midnight/20" />
+        <div className="absolute inset-0 bg-midnight/55" />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-[1400px] px-5 pb-16 pt-28 sm:px-8 sm:pb-20 sm:pt-32">
@@ -64,34 +60,26 @@ export function Hero({ kicker, headline, body, cta, scarcity, image, accent }: H
             className={`mt-6 font-display text-[1.9rem] font-normal leading-[1.05] text-paper sm:text-5xl lg:text-6xl ${step()}`}
             style={delay(320)}
           >
-            {headline.split("\n").map((line, i) => (
-              <span key={i} className="block">
-                {accent ? withAccent(line, accent) : line}
-              </span>
-            ))}
+            <span className="block">{line1}</span>
+            <span className="block italic text-gold-light">{line2}</span>
           </h1>
 
           <p
             className={`mt-7 max-w-xl font-body text-[13px] leading-relaxed text-sand/90 sm:text-base ${step()}`}
             style={delay(500)}
           >
-            {body}
+            {body.split("\n").map((line, i) => (
+              <span key={i} className="block">
+                {line}
+              </span>
+            ))}
           </p>
 
           <p
-            className={`mt-4 flex items-center gap-2 font-label text-[13px] text-mist ${step()}`}
+            className={`mt-6 font-label text-[15px] tracking-[0.16em] text-gold-light sm:text-xl ${step()}`}
             style={delay(600)}
           >
-            <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-gold-light" fill="none" aria-hidden="true">
-              <path
-                d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-              <circle cx="12" cy="9.5" r="2.2" stroke="currentColor" strokeWidth="1.5" />
-            </svg>
-            Near Auroville, Pondicherry
+            {priceLine}
           </p>
 
           <div className={`mt-9 flex flex-wrap items-center gap-4 ${step()}`} style={delay(680)}>
@@ -99,10 +87,6 @@ export function Hero({ kicker, headline, body, cta, scarcity, image, accent }: H
               {cta}
             </Button>
           </div>
-
-          <p className={`mt-6 font-label text-[12px] tracking-[0.06em] text-mist ${step()}`} style={delay(820)}>
-            {scarcity}
-          </p>
         </div>
       </div>
     </section>

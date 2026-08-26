@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { StickyCtaBar } from "@/components/layout/StickyCtaBar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
 import { CredibilityStrip } from "@/components/sections/CredibilityStrip";
-import { TensionSection } from "@/components/sections/TensionSection";
+import { TheCase } from "@/components/sections/TheCase";
 import { HostingSection } from "@/components/sections/HostingSection";
 import { MidCta } from "@/components/sections/MidCta";
 import { ArchitectSection } from "@/components/sections/ArchitectSection";
 import { VillaGallery } from "@/components/sections/VillaGallery";
 import { LocationSection } from "@/components/sections/LocationSection";
 import { PlansSection } from "@/components/sections/PlansSection";
-import { OwnerProof } from "@/components/sections/OwnerProof";
 import { PricingSection } from "@/components/sections/PricingSection";
 import { LeadForm } from "@/components/sections/LeadForm";
 import { FaqSection } from "@/components/sections/FaqSection";
@@ -20,13 +20,13 @@ import { lpB } from "@/content/lp-b";
 import {
   credibilityItems,
   villaImages,
-  galleryHeadline,
+  galleryKicker,
   gallerySupportInvestor,
   faqShared,
 } from "@/content/shared";
 
-// LP-B — Airbnb & Rental Investors (content spec section 03). Noindex,
-// nofollow: paid traffic only, per the spec's technical setup guardrail.
+// Investor landing page (BUILD-SPEC v3.0). Noindex, nofollow: paid traffic
+// only, per §2.4. Excluded from sitemap.xml (see app/sitemap.ts).
 export const metadata: Metadata = {
   title: lpB.meta.title,
   description: lpB.meta.description,
@@ -48,37 +48,21 @@ export default function HomePage() {
     <>
       <AnalyticsBoot />
       <SiteHeader cta={lpB.hero.cta} />
+      <StickyCtaBar cta={lpB.hero.cta} />
       <FloatingActions />
 
       <main id="top">
         <Hero
           kicker={lpB.hero.kicker}
-          headline={lpB.hero.headline}
+          line1={lpB.hero.line1}
+          line2={lpB.hero.line2}
           body={lpB.hero.body}
+          priceLine={lpB.hero.priceLine}
           cta={lpB.hero.cta}
-          scarcity={lpB.hero.scarcity}
-          image={villaImages.elevation}
-          accent="you love."
+          image={villaImages.exteriorFront}
         />
         <CredibilityStrip items={credibilityItems.investor} />
-        <TensionSection
-          headline={lpB.dilemma.headline}
-          intro={lpB.dilemma.intro}
-          points={[...lpB.dilemma.points]}
-          closing={lpB.dilemma.closing}
-          accent="a return."
-          tone="light"
-          image={villaImages.livingDiningKitchen}
-        />
-        <TensionSection
-          id="about"
-          headline={lpB.answer.headline}
-          intro={lpB.answer.intro}
-          points={[...lpB.answer.points]}
-          closing={lpB.answer.closing}
-          accent="Auroma Holiday Villas."
-          image={villaImages.exteriorFrontAngle}
-        />
+        <TheCase lines={[...lpB.theCase.lines]} closing={lpB.theCase.closing} />
         <HostingSection
           id="amenities"
           kicker={lpB.hosting.kicker}
@@ -87,10 +71,9 @@ export default function HomePage() {
         />
         <MidCta headline={lpB.midCta.headline} body={lpB.midCta.body} cta={lpB.midCta.cta} />
         <ArchitectSection id="architect" />
-        <VillaGallery id="gallery" headline={galleryHeadline} support={gallerySupportInvestor} />
+        <VillaGallery id="gallery" kicker={galleryKicker} support={gallerySupportInvestor} />
         <LocationSection id="location" comeForLabel="What your guests will come for" />
         <PlansSection id="plans" />
-        <OwnerProof headline="The strongest thing an owner can say is that they bought again." />
         <PricingSection
           kicker={lpB.pricing.kicker}
           headlinePrefix={lpB.pricing.headlinePrefix}
@@ -102,7 +85,7 @@ export default function HomePage() {
         <FaqSection items={faqItems} />
       </main>
 
-      <Footer description={lpB.hero.body} />
+      <Footer />
     </>
   );
 }

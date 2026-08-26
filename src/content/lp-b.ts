@@ -1,60 +1,30 @@
-// LP-B — Airbnb & Rental Investors. Copy set verbatim per content spec section 03.
+// Investor landing page ("/"). Copy set verbatim per BUILD-SPEC v3.0
+// (Two Rabbits · Auroma Holiday Villas · 26 August 2026).
 // Register: rational, specific. Noindex, nofollow — paid traffic only.
 
 export const lpB = {
   meta: {
-    title: "Auroma Holiday Villas — For Airbnb & Rental Investors",
+    title: "Auroma Holiday Villas — An Architect-Designed Villa Near Auroville",
     description:
-      "Three architect-designed villas near Auroville, designed for short-stay hosting. Get the brochure on WhatsApp.",
+      "Own a villa near Auroville. Three bedrooms, sleeps eight, private plunge pool. Architect-designed by Ar. Trupti Doshi, ten minutes from the Matrimandir.",
     robots: "noindex, nofollow",
   },
 
   hero: {
-    kicker: "Three villas · Near Auroville",
-    headline: "A holiday home you love.\nDesigned to be let out when you're not in it.",
-    body: "Three architect-designed villas, ten minutes from the Matrimandir. Drawn by Ar. Trupti Doshi over twenty-five years of practice — not selected from a builder's catalogue.",
-    cta: "Book a Site Visit",
-    scarcity: "Three villas. That is the entire project.",
+    kicker: "NEAR AUROVILLE · PONDICHERRY",
+    line1: "Own a villa near Auroville.",
+    line2: "Host it when you're away.",
+    body: "Three bedrooms, sleeps eight, private plunge pool.\nArchitect-designed by Ar. Trupti Doshi, ten minutes from the Matrimandir.",
+    priceLine: "From ₹2.5 crore",
+    cta: "Get the brochure on WhatsApp",
   },
 
-  dilemma: {
-    headline: "You want a holiday home.\nYour money wants a return.",
-    intro: "If you've ever considered buying a holiday home, you've probably faced the same three dilemmas.",
-    points: [
-      {
-        title: "Capital with no soul",
-        body: "Your investments grow your money. But you can't holiday in them. You can't make memories in them.",
-      },
-      {
-        title: "Real estate that doesn't perform",
-        body: "Most villas look alike. And on Airbnb, sameness is invisible.",
-      },
-      {
-        title: "Ownership with no ease",
-        body: "A house that sits empty eleven months of the year.",
-      },
+  theCase: {
+    lines: [
+      "A holiday home is usually a bad asset.",
+      "It sits empty most of the year. It looks like every other villa\non the platform. And running it is someone's full-time job.",
     ],
-    closing: "What if you didn't have to choose?",
-  },
-
-  answer: {
-    headline: "Introducing Auroma Holiday Villas.",
-    intro: "Architect-led holiday homes near Auroville, designed for you, and designed with short-stay hosting in mind.",
-    points: [
-      {
-        title: "Capital with soul",
-        body: "Most assets sit in a statement. This one has a door.",
-      },
-      {
-        title: "Real estate designed to be chosen",
-        body: "Guests don't book square feet. They book a feeling. So that's what we designed for.",
-      },
-      {
-        title: "Ownership with ease",
-        body: "We'll connect you with professional hosts and property managers who can run the villa on your behalf.",
-      },
-    ],
-    closing: "Architect-led. Not builder-built.",
+    closing: "So we designed against all three.",
   },
 
   hosting: {
@@ -66,7 +36,7 @@ export const lpB = {
         body: "Group bookings are the difference between a listing and a business.",
       },
       {
-        title: "A pool at the door, not down the road.",
+        title: "A plunge pool at the door, not down the road.",
         body: "Private, in frame from the living room, and in the first photograph.",
       },
       {
@@ -89,8 +59,8 @@ export const lpB = {
   },
 
   midCta: {
-    headline: "Want the plans, areas and price band?",
-    body: "The full brochure comes to you on WhatsApp, straight away.",
+    headline: "Want the plans, areas and full price sheet?",
+    body: "The brochure comes to you on WhatsApp, straight away.",
     cta: "Send me the brochure",
   },
 
@@ -104,7 +74,7 @@ export const lpB = {
 
   form: {
     headline: "Get the brochure on WhatsApp.",
-    body: "Plans, areas, specifications and the current price band — sent to you in about a minute.",
+    body: "Plans, areas, specifications and the full price sheet —\nsent to you in about a minute.",
   },
 
   faq: [
