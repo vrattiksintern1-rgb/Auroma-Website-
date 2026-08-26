@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
@@ -16,37 +17,15 @@ const navLinks = [
 
 function HeaderLogo() {
   return (
-    <span className="flex items-center gap-3">
-      <svg
-        viewBox="0 0 86 72"
-        className="h-10 w-12 shrink-0 text-gold-light sm:h-11 sm:w-14"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M9 64 36 15c3.1-5.7 11.2-5.7 14.4 0L78 64"
-          stroke="currentColor"
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M41.8 34.5 28.4 58.2c-1.6 2.8.4 6.3 3.7 6.3h26"
-          stroke="currentColor"
-          strokeWidth="8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-      <span className="flex flex-col justify-center leading-none">
-        <span className="font-display text-xl font-normal tracking-[0.05em] text-paper antialiased sm:text-2xl">
-          AUROMA
-        </span>
-        <span className="mt-1 font-label text-[10px] font-medium uppercase tracking-[0.34em] text-gold-light antialiased sm:text-xs">
-          HOLIDAY VILLAS
-        </span>
-      </span>
-    </span>
+    <Image
+      src="/images/logo/logo-current.png"
+      alt="Auroma Holiday Villas"
+      width={4192}
+      height={1671}
+      sizes="(min-width: 640px) 215px, 190px"
+      className="h-14 w-auto shrink-0 object-contain sm:h-16"
+      priority
+    />
   );
 }
 
@@ -63,10 +42,10 @@ export function SiteHeader({ cta }: { cta: string }) {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 overflow-visible bg-midnight">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-3 pr-7 sm:px-8 sm:py-3.5 sm:pr-10 xl:pr-12">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-5 py-3.5 pr-7 sm:px-8 sm:py-4 sm:pr-10 xl:pr-12">
         <a
           href="#top"
-          className="flex h-12 w-48 shrink-0 items-center justify-start sm:h-14 sm:w-56"
+          className="flex h-14 min-w-max shrink-0 items-center justify-start overflow-visible sm:h-16"
           aria-label="Auroma Holiday Villas — back to top"
         >
           <HeaderLogo />
@@ -110,8 +89,8 @@ export function SiteHeader({ cta }: { cta: string }) {
 
       {menuOpen && (
         <div className="fixed inset-0 z-50 bg-midnight xl:hidden">
-          <div className="flex items-center justify-between px-5 py-3">
-            <div className="flex h-12 w-48 items-center justify-start">
+          <div className="flex items-center justify-between px-5 py-3.5">
+            <div className="flex h-14 min-w-max items-center justify-start overflow-visible sm:h-16">
               <HeaderLogo />
             </div>
             <button
