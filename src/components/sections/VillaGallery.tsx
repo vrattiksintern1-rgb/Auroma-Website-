@@ -24,78 +24,10 @@ const images = [
   villaImages.bedroomWindow,
   villaImages.bathroomTub,
   villaImages.solarRoofTerrace,
+  villaImages.gameRoom,
   villaImages.exteriorSideAngle,
 ];
 const amenityIcons = [IconPool, IconGrid, IconSprout, IconSofa, IconCar];
-
-// Wide-format shots (used for the first/heading tiles) vs. standard 4:3 shots.
-const wideIndexes = new Set([0, 3, 12]);
-const aspectRatios = images.map((_, i) => (wideIndexes.has(i) ? 16 / 10 : 4 / 3));
-
-const DESKTOP_COLUMN_COUNT = 3;
-
-// True masonry: walk the images in order and always drop the next one into
-// whichever column is currently shortest (Pinterest-style greedy packing).
-// Unlike CSS `columns` (which lets the browser balance columns and can strand
-// a column short) or CSS Grid row-spans (which reserves fixed-size cells),
-// this stacks each column with normal block flow, so a column can never have
-// a gap partway down it — only a harmless height difference at the very
-// bottom, which is inherent to masonry and not a "gap".
-//
-// The initial greedy pass can still leave columns lopsided: e.g. every
-// wide (shorter) image happens to land in the same column, so that column
-// needs an extra image just to catch up to the others' height. A second
-// pass then repeatedly swaps single images between columns whenever a swap
-// shrinks the gap between the tallest and shortest column, until no such
-// swap remains — a small local-search cleanup on top of the greedy pack.
-function distributeMasonry(columnCount: number, imageCount: number) {
-  const REFERENCE_WIDTH = 400; // only relative height comparisons matter here
-  const GAP = 16; // px — matches Tailwind gap-4
-  const itemHeight = (i: number) => REFERENCE_WIDTH / aspectRatios[i] + GAP;
-
-  const heights = new Array(columnCount).fill(0);
-  const columns: number[][] = Array.from({ length: columnCount }, () => []);
-  for (let i = 0; i < imageCount; i++) {
-    let shortest = 0;
-    for (let c = 1; c < columnCount; c++) {
-      if (heights[c] < heights[shortest]) shortest = c;
-    }
-    columns[shortest].push(i);
-    heights[shortest] += itemHeight(i);
-  }
-
-  let improved = true;
-  while (improved) {
-    improved = false;
-    for (let a = 0; a < columnCount; a++) {
-      for (let b = a + 1; b < columnCount; b++) {
-        const before = Math.abs(heights[a] - heights[b]);
-        for (let ia = 0; ia < columns[a].length; ia++) {
-          for (let ib = 0; ib < columns[b].length; ib++) {
-            const ha = itemHeight(columns[a][ia]);
-            const hb = itemHeight(columns[b][ib]);
-            const after = Math.abs(heights[a] - ha + hb - (heights[b] - hb + ha));
-            if (after < before) {
-              const swap = columns[a][ia];
-              columns[a][ia] = columns[b][ib];
-              columns[b][ib] = swap;
-              heights[a] += hb - ha;
-              heights[b] += ha - hb;
-              improved = true;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Swaps can put images out of their original order within a column;
-  // restore top-to-bottom reading order now that membership is settled.
-  columns.forEach((col) => col.sort((x, y) => x - y));
-  return columns;
-}
-
-const desktopColumns = distributeMasonry(DESKTOP_COLUMN_COUNT, images.length);
 
 export function VillaGallery({
   kicker,
@@ -175,30 +107,20 @@ export function VillaGallery({
         </div>
       </div>
 
-      {/* Desktop: true masonry — images are pre-sorted into column buckets by a
-          shortest-column-first algorithm, then each column stacks its images in
-          normal block flow. No fixed cells, no browser column-balancing, so no
-          gaps can ever open up inside a column. */}
-      <div className="mx-auto mt-12 hidden max-w-[1300px] gap-4 px-6 sm:px-8 lg:mt-16 lg:flex">
-        {desktopColumns.map((column, ci) => (
-          <div key={ci} className="flex flex-1 flex-col gap-4">
-            {column.map((i) => {
-              const img = images[i];
-              return (
-                <button
-                  key={img.src}
-                  type="button"
-                  onClick={() => openLightbox(i)}
-                  aria-label={`Open image ${i + 1} of ${images.length}`}
-                  className={`relative block w-full overflow-hidden rounded-xl shadow-xl shadow-midnight/10 ${
-                    wideIndexes.has(i) ? "aspect-[16/10]" : "aspect-[4/3]"
-                  }`}
-                >
-                  <GalleryImage img={img} priority={i === 0} />
-                </button>
-              );
-            })}
-          </div>
+      {/* Desktop: a uniform 3-column grid. Every tile is the same size, and
+          the image count (15) is a multiple of 3, so every row fills
+          completely — no dangling row, no oversized tile, no empty cell. */}
+      <div className="mx-auto mt-12 hidden max-w-[1300px] grid-cols-3 gap-4 px-6 sm:px-8 lg:mt-16 lg:grid">
+        {images.map((img, i) => (
+          <button
+            key={img.src}
+            type="button"
+            onClick={() => openLightbox(i)}
+            aria-label={`Open image ${i + 1} of ${images.length}`}
+            className="relative block aspect-[4/3] w-full overflow-hidden rounded-xl shadow-xl shadow-midnight/10"
+          >
+            <GalleryImage img={img} priority={i === 0} />
+          </button>
         ))}
       </div>
 
@@ -325,7 +247,7 @@ function GalleryImage({
       fill
       priority={priority}
       loading={priority ? undefined : eager ? "eager" : "lazy"}
-      sizes="(min-width: 1024px) 60vw, 85vw"
+      sizes="(min-width: 1024px) 30vw, 85vw"
       className="object-cover transition-transform duration-700 ease-out hover:scale-[1.03]"
     />
   );

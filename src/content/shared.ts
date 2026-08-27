@@ -137,6 +137,12 @@ export const villaImages = {
     width: 1293,
     height: 1216,
   },
+  gameRoom: {
+    src: "/images/villa/game-room.jpg",
+    alt: "Roof-terrace game room under a timber pergola, with a pool table, carrom board and chess table overlooking the treetops.",
+    width: 1600,
+    height: 918,
+  },
 } as const;
 
 export const planImages = {
@@ -163,10 +169,10 @@ export const planImages = {
 export const credibilityItems = {
   investor: [
     "25+ years of practice",
-    "45 homes delivered",
+    "200+ homes delivered",
     "India's first “House of Tomorrow”",
     "Recognised by the United Nations",
-    "30+ awards",
+    "40+ awards",
   ],
   homeBuyer: [
     "25+ years of practice",
@@ -188,13 +194,12 @@ export const architect = {
   bioContinued:
     " — and has spent every project since answering it in brick, lime and light.",
   credentials: [
-    { stat: "45 designer homes", detail: "delivered across Pondicherry–Auroville" },
+    { stat: "200+ designer homes", detail: "delivered across Pondicherry–Auroville" },
     { stat: "Gratitude Ecovilla", detail: "— India's first internationally recognised “House of Tomorrow”" },
     { stat: "Sharanam", detail: "— recognised by the United Nations for sustainable architecture" },
     { stat: "GRIHA 5-Star", detail: "with an Exemplary Performance Award" },
-    { stat: "30+", detail: "national and international awards" },
+    { stat: "40+", detail: "national and international awards" },
     { stat: "5,00,000+ sq. ft.", detail: "of eco-spaces designed around nature and wellness" },
-    { stat: "200+ homeowners", detail: "who trusted the practice with a home" },
   ],
   closing: "This villa was drawn by her hand.",
 };

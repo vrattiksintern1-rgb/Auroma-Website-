@@ -15,45 +15,43 @@ export const lpB = {
     line1: "Own a villa near Auroville.",
     line2: "Host it when you're away.",
     body: "Three bedrooms, sleeps eight, private plunge pool.\nArchitect-designed by Ar. Trupti Doshi, ten minutes from the Matrimandir.",
-    priceLine: "From ₹2.5 crore",
+    priceLine: "Under ₹4 crore",
     cta: "Get the brochure on WhatsApp",
   },
 
   theCase: {
-    lines: [
-      "A holiday home is usually a bad asset.",
-      "It sits empty most of the year. It looks like every other villa\non the platform. And running it is someone's full-time job.",
-    ],
-    closing: "So we designed against all three.",
+    headline: "Most holiday homes ask more than they give back.",
+    body: "You'd use it six weekends a year, and it sits empty for the rest.\nYou don't live in Pondicherry — running a short-stay let from\nwherever you are isn't something you signed up for. And everyone\nselling you a villa promises a number they can't stand behind.",
+    closing: "We built ours differently. And we'll introduce you to the people who run it.",
   },
 
   hosting: {
     kicker: "Designed for Hosting",
-    headline: "Decisions we made because someone else will stay here too.",
+    headline: "Every decision made with your guests in mind.",
     points: [
       {
         title: "Sleeps eight, in three ensuite bedrooms.",
         body: "Group bookings are the difference between a listing and a business.",
       },
       {
+        title: "You won't be running it yourself.",
+        body: "You don't live here — we do. We'll introduce you to hosts and property managers already operating in Auroville and Pondicherry who handle listings, guests, cleaning and keys. They contract directly with you. We make the introduction and take nothing from it.",
+      },
+      {
         title: "A plunge pool at the door, not down the road.",
-        body: "Private, in frame from the living room, and in the first photograph.",
+        body: "Private, and visible from the living room the moment you walk in.",
       },
       {
-        title: "A terrace that photographs at golden hour.",
-        body: "Open, pergola-shaded, with a long view over the canopy.",
+        title: "A game room on the top floor.",
+        body: "Pool table, carrom and chess under a timber pergola, open to the evening air.",
       },
       {
-        title: "Rooms that look different from one another.",
-        body: "A listing needs twelve photographs that aren't the same photograph.",
+        title: "Rooms that feel different from one another.",
+        body: "A guest who moves from the courtyard to the terrace to the pool has had three different mornings in one house.",
       },
       {
-        title: "Materials chosen to age, not to date.",
-        body: "Lime, stone and timber forgive wear in a way that gloss finishes do not.",
-      },
-      {
-        title: "Hosting handled, if you want it.",
-        body: "We'll connect you with professional hosts and property managers working in Auroville and Pondicherry.",
+        title: "Materials that get better with age.",
+        body: "Lime, stone and timber wear in rather than wear out — so the house still looks right in ten years.",
       },
     ],
   },
@@ -66,7 +64,7 @@ export const lpB = {
 
   pricing: {
     kicker: "Pricing",
-    headlinePrefix: "From ",
+    headlinePrefix: "Under ",
     exclusions: "Exclusive of registration, stamp duty, GST and statutory charges.",
     revision: "Prices are indicative and subject to revision.",
     cta: "Get the full price sheet on WhatsApp",

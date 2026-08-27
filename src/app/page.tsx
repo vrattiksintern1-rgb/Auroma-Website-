@@ -62,9 +62,14 @@ export default function HomePage() {
           image={villaImages.exteriorFront}
         />
         <CredibilityStrip items={credibilityItems.investor} />
-        <TheCase lines={[...lpB.theCase.lines]} closing={lpB.theCase.closing} />
+        <TheCase
+          id="the-case"
+          headline={lpB.theCase.headline}
+          body={lpB.theCase.body}
+          closing={lpB.theCase.closing}
+        />
         <HostingSection
-          id="amenities"
+          id="designed-for-hosting"
           kicker={lpB.hosting.kicker}
           headline={lpB.hosting.headline}
           points={[...lpB.hosting.points]}
